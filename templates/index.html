@@ -1,0 +1,218 @@
+{% extends "base.html" %} {% block title %}LeadDesk Mini{% endblock %} {% block
+content %}
+
+<!-- Navigation -->
+
+<nav class="navbar">
+  <div class="logo">LeadDesk Mini</div>
+
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+
+    <li><a href="#contact">Contact</a></li>
+
+    <li><a href="/admin">Admin</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+
+<section class="hero">
+  <div class="hero-left">
+    <h1>
+      Capture More Leads.<br />
+
+      Grow Your Business Faster.
+    </h1>
+
+    <p>
+      Manage customer leads effortlessly with a modern dashboard, status
+      tracking, and real-time updates.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#contact" class="btn-primary"> Get Started </a>
+
+      <a href="#features" class="btn-secondary"> Learn More </a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <img
+      src="{{ url_for('static', filename='images/hero.svg') }}"
+      alt="LeadDesk Hero"
+    />
+  </div>
+</section>
+<!-- Features Section -->
+
+<section class="features" id="features">
+  <h2>Why Choose LeadDesk Mini?</h2>
+
+  <p class="section-subtitle">
+    Everything you need to capture and manage customer leads efficiently.
+  </p>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+
+      <h3>Fast Lead Capture</h3>
+
+      <p>Collect customer information instantly using a simple lead form.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+
+      <h3>Secure Storage</h3>
+
+      <p>Store all leads safely in a database with easy access.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+
+      <h3>Lead Management</h3>
+
+      <p>Update lead status, search records, and organize your workflow.</p>
+    </div>
+  </div>
+</section>
+<section class="stats-section">
+  <div class="stat-box">
+    <h2>100+</h2>
+    <p>Leads Managed</p>
+  </div>
+
+  <div class="stat-box">
+    <h2>95%</h2>
+    <p>Customer Satisfaction</p>
+  </div>
+
+  <div class="stat-box">
+    <h2>24/7</h2>
+    <p>Support</p>
+  </div>
+
+  <div class="stat-box">
+    <h2>100%</h2>
+    <p>Secure</p>
+  </div>
+</section>
+<!-- Contact Section -->
+
+<section class="contact-section" id="contact">
+  <div class="contact-left">
+    <h2>Let's Grow Your Business 🚀</h2>
+
+    <p>Fill out the form and our team will contact you shortly.</p>
+
+    <ul>
+      <li>✔ Fast Response</li>
+      <li>✔ Secure Data Storage</li>
+      <li>✔ Professional Lead Management</li>
+      <li>✔ Easy Dashboard Access</li>
+    </ul>
+  </div>
+
+  <div class="contact-right">
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
+    <p class="{{ category }}">{{ message }}</p>
+    {% endfor %} {% endif %} {% endwith %}
+
+    <form action="/submit" method="POST">
+      <input type="text" name="name" placeholder="Full Name" required />
+
+      <input type="email" name="email" placeholder="Email Address" required />
+
+      <select name="budget" required>
+        <option value="">Select Budget</option>
+
+        <option>$100 - $500</option>
+
+        <option>$500 - $1000</option>
+
+        <option>$1000+</option>
+      </select>
+
+      <textarea
+        name="message"
+        placeholder="Tell us about your project..."
+        required
+      ></textarea>
+
+      <button type="submit">Submit Lead</button>
+    </form>
+  </div>
+</section>
+<!-- Testimonials -->
+
+<section class="testimonials">
+  <h2>What Our Customers Say</h2>
+
+  <p class="section-subtitle">
+    Businesses trust LeadDesk Mini to manage their customer leads.
+  </p>
+
+  <div class="testimonial-grid">
+    <div class="testimonial-card">
+      <p>
+        "LeadDesk Mini helped us organize our customer inquiries. It's simple,
+        fast, and easy to use."
+      </p>
+
+      <h4>Rahul Sharma</h4>
+
+      <span>Startup Founder</span>
+    </div>
+
+    <div class="testimonial-card">
+      <p>
+        "The dashboard is clean and makes managing leads effortless. Highly
+        recommended!"
+      </p>
+
+      <h4>Priya Patel</h4>
+
+      <span>Marketing Manager</span>
+    </div>
+
+    <div class="testimonial-card">
+      <p>
+        "A great tool for small businesses. The lead tracking feature saves us a
+        lot of time."
+      </p>
+
+      <h4>Amit Verma</h4>
+
+      <span>Business Owner</span>
+    </div>
+  </div>
+</section>
+<footer class="footer">
+  <div class="footer-content">
+    <h2>LeadDesk Mini</h2>
+
+    <p>
+      A modern lead management system built with Flask, SQLAlchemy, HTML, CSS,
+      and JavaScript.
+    </p>
+
+    <div class="footer-links">
+      <a href="#">Home</a>
+
+      <a href="#features">Features</a>
+
+      <a href="#contact">Contact</a>
+
+      <a href="/admin">Dashboard</a>
+    </div>
+
+    <hr />
+
+    <p>© 2026 LeadDesk Mini | Built by Soumya Hallur</p>
+  </div>
+</footer>
+{% endblock %}

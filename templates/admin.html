@@ -1,0 +1,262 @@
+{% extends "base.html" %} {% block title %} Admin Dashboard {% endblock %} {%
+block content %}
+
+<div class="admin-container">
+  <div class="dashboard-header">
+    <a href="/logout" class="logout-btn">
+    🚪 Logout
+</a>
+
+    <div>
+        <h1>📊 Lead Dashboard</h1>
+        
+    </div>
+
+    <div>
+        <a href="/" class="home-btn">
+            🏠 Back to Website
+        </a>
+    </div>
+
+</div>
+
+  <!-- Statistics -->
+  <div class="stats">
+
+    <div class="stat-card total">
+        <h3>👥 Total Leads</h3>
+        <h2>{{ total }}</h2>
+    </div>
+
+    <div class="stat-card new">
+        <h3>🟢 New Leads</h3>
+        <h2>{{ new }}</h2>
+    </div>
+
+    <div class="stat-card contacted">
+        <h3>📞 Contacted</h3>
+        <h2>{{ contacted }}</h2>
+    </div>
+
+    <div class="stat-card closed">
+        <h3>✅ Closed</h3>
+        <h2>{{ closed }}</h2>
+    </div>
+
+</div>
+
+<div class="charts">
+
+    <div class="chart-card">
+
+        <h2>Lead Status Distribution</h2>
+
+        <canvas id="pieChart"></canvas>
+
+    </div>
+
+    <div class="chart-card">
+
+        <h2>Lead Statistics</h2>
+
+        <canvas id="barChart"></canvas>
+
+    </div>
+
+</div>
+  <div class="toolbar">
+
+<form class="search-form" method="GET" action="/admin">
+
+<input
+type="text"
+name="search"
+placeholder="Search by Name or Email..."
+value="{{ search }}">
+
+<button class="search-btn">
+🔍 Search
+</button>
+
+<a class="clear-btn" href="/admin">
+Clear
+</a>
+
+</form>
+
+<a class="export-btn" href="/export">
+📄 Export CSV
+</a>
+
+</div>
+  <div style="margin:20px 0;">
+    <a href="/export">
+        <button type="button">📄 Export CSV</button>
+    </a>
+</div>
+  
+  <br />
+
+  <a href="/">← Back to Website</a>
+
+  <br /><br />
+
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %} {% for category, message in messages %}
+  <p class="{{ category }}">{{ message }}</p>
+  {% endfor %} {% endif %} {% endwith %}
+
+  <h3>Total Leads : {{ leads|length }}</h3>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Budget</th>
+      <th>Message</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+
+    {% if leads %} {% for lead in leads %}
+
+    <tr>
+      <td>{{ lead.name }}</td>
+
+      <td>{{ lead.email }}</td>
+
+      <td>{{ lead.budget }}</td>
+
+      <td>{{ lead.message }}</td>
+
+     <td>
+
+    <div class="status-wrapper">
+
+        {% if lead.status == "New" %}
+            <span class="badge badge-new">New</span>
+
+        {% elif lead.status == "Contacted" %}
+            <span class="badge badge-contacted">Contacted</span>
+
+        {% else %}
+            <span class="badge badge-closed">Closed</span>
+
+        {% endif %}
+
+    </div>
+
+    <br>
+
+    <form action="/update/{{ lead.id }}" method="POST">
+
+        <select name="status">
+
+            <option value="New"
+                {% if lead.status == "New" %}selected{% endif %}>
+                New
+            </option>
+
+            <option value="Contacted"
+                {% if lead.status == "Contacted" %}selected{% endif %}>
+                Contacted
+            </option>
+
+            <option value="Closed"
+                {% if lead.status == "Closed" %}selected{% endif %}>
+                Closed
+            </option>
+
+        </select>
+
+        <br><br>
+
+        <button class="update-btn" type="submit">
+            Update
+        </button>
+
+    </form>
+
+</td>
+
+      <td>
+        <a
+class="delete-btn"
+href="/delete/{{ lead.id }}"
+onclick="return confirm('Delete this lead?');">
+
+Delete
+
+</a>
+      </td>
+    </tr>
+
+    {% endfor %} {% else %}
+
+    <tr>
+      <td colspan="6" style="text-align: center; padding: 25px">
+        No Leads Found
+      </td>
+    </tr>
+
+    {% endif %}
+  </table>
+</div>
+
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    new Chart(document.getElementById("pieChart"), {
+        type: "pie",
+        data: {
+            labels: ["New", "Contacted", "Closed"],
+            datasets: [{
+                data: [{{ new }}, {{ contacted }}, {{ closed }}],
+                backgroundColor: [
+                    "#3b82f6",
+                    "#f59e0b",
+                    "#10b981"
+                ]
+            }]
+        }
+    });
+
+    new Chart(document.getElementById("barChart"), {
+        type: "bar",
+        data: {
+            labels: ["Total", "New", "Contacted", "Closed"],
+            datasets: [{
+                label: "Leads",
+                data: [
+                    {{ total }},
+                    {{ new }},
+                    {{ contacted }},
+                    {{ closed }}
+                ],
+                backgroundColor: [
+                    "#2563eb",
+                    "#3b82f6",
+                    "#f59e0b",
+                    "#10b981"
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+});
+</script>
+
+{% endblock %}
+
